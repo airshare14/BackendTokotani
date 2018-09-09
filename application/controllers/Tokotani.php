@@ -58,8 +58,8 @@ class Tokotani extends REST_Controller
 
 	public function tampilPenjualan_get()
 	{
-		if($this->session->userdata("id_pengguna")!=null){
-			$id_p=$this->session->userdata("id_pengguna");
+		$id_p=$this->input->get_request_header('Authorization');
+		if($id_p!=null){
 			$tampil=$this->db->query("select * from penjualan where id_pengguna= $id_p ")->result();
 
 			if($tampil){
@@ -107,8 +107,8 @@ class Tokotani extends REST_Controller
 
 	public function tambahPenjualan_post()
 	{
-		if($this->session->userdata("id_pengguna")!=null){
-			$id_p=$this->session->userdata("id_pengguna");
+		$id_p=$this->input->get_request_header('Authorization');
+		if($id_p!=null){
 			$jp=$this->post("judul_produk");
 			$kat=$this->post("kategori");
 			$satuan=$this->post("satuan");
@@ -167,8 +167,8 @@ class Tokotani extends REST_Controller
 	}
 	public function hapusPenjualan_get()
 	{
-		if($this->session->userdata("id_pengguna")!=null){
-			$id_p=$this->session->userdata("id_pengguna");
+		$id_p=$this->input->get_request_header('Authorization');
+		if($id_p!=null){
 			$id_penjualan=$this->get("id_penjualan");
 
 			$hapus=$this->db->query("DELETE FROM `penjualan` WHERE id_penjualan=$id_penjualan");
@@ -192,8 +192,8 @@ class Tokotani extends REST_Controller
 
 	public function tampilMitraPetani_get()
 	{
-		if($this->session->userdata("id_pengguna")!=null){
-			$id_p=$this->session->userdata("id_pengguna");
+		$id_p=$this->input->get_request_header('Authorization');
+		if($id_p!=null){
 			$tampil=$this->db->query("select * from mitra_petani where id_pengguna= $id_p ")->result();
 
 			if($tampil){
@@ -213,8 +213,8 @@ class Tokotani extends REST_Controller
 	}
 	public function tambahMitraPetani_post()
 	{
-		if($this->session->userdata("id_pengguna")!=null){
-			$id_p=$this->session->userdata("id_pengguna");
+		$id_p=$this->input->get_request_header('Authorization');
+		if($id_p!=null){
 			$nama=$this->post("nama");
 			$kota=$this->post("kota");
 			$no_telp=$this->post("no_telp");
@@ -244,8 +244,8 @@ class Tokotani extends REST_Controller
 
 	public function hapusMitraPetani_get()
 	{
-		if($this->session->userdata("id_pengguna")!=null){
-			$id_p=$this->session->userdata("id_pengguna");
+		$id_p=$this->input->get_request_header('Authorization');
+		if($id_p!=null){
 			$id_mitrapetani=$this->get("id_mitrapetani");
 
 			$hapus=$this->db->query("DELETE FROM `mitra_petani` WHERE id_mitrapetani=$id_mitrapetani");
@@ -269,8 +269,8 @@ class Tokotani extends REST_Controller
 
 	public function tampilMitraBerjejaring_get()
 	{
-		if($this->session->userdata("id_pengguna")!=null){
-			$id_p=$this->session->userdata("id_pengguna");
+		$id_p=$this->input->get_request_header('Authorization');
+		if($id_p!=null){
 			$tampil=$this->db->query("select * from mitra_berjejaring where id_pengguna= $id_p ")->result();
 
 			if($tampil){
@@ -291,8 +291,8 @@ class Tokotani extends REST_Controller
 
 	public function tambahMitraBerjejaring_post()
 	{
-		if($this->session->userdata("id_pengguna")!=null){
-			$id_p=$this->session->userdata("id_pengguna");
+		$id_p=$this->input->get_request_header('Authorization');
+		if($id_p!=null){
 			$nama_mitra=$this->post("nama_mitra");
 			$no_telp=$this->post("no_telp");
 			$email=$this->post("email");
@@ -324,8 +324,8 @@ class Tokotani extends REST_Controller
 
 	public function hapusMitraBerjejaring_get()
 	{
-		if($this->session->userdata("id_pengguna")!=null){
-			$id_p=$this->session->userdata("id_pengguna");
+		$id_p=$this->input->get_request_header('Authorization');
+		if($id_p!=null){
 			$id_mitraberjejaring=$this->get("id_mitraberjejaring");
 
 			$hapus=$this->db->query("DELETE FROM `mitra_berjejaring` WHERE id_mitraberjejaring = $id_mitraberjejaring");
@@ -349,8 +349,8 @@ class Tokotani extends REST_Controller
 
 	public function tampilTransaksiPenjualan_get()
 	{
-		if($this->session->userdata("id_pengguna")!=null){
-			$id_p=$this->session->userdata("id_pengguna");
+		$id_p=$this->input->get_request_header('Authorization');
+		if($id_p!=null){
 			$tampil=$this->db->query("SELECT a . * , c . * FROM  `transaksi_penjualan` AS a
 			INNER JOIN  `penjualan` AS b ON a.id_penjualan = b.id_penjualan
 			INNER JOIN  `pengguna` AS c ON b.id_pengguna = c.id_pengguna ")->result();
@@ -373,8 +373,9 @@ class Tokotani extends REST_Controller
 
 
 	public function KonfirmasiPengiriman_get(){
-		if($this->session->userdata("id_pengguna")!=null){
+		$id_p=$this->input->get_request_header('Authorization');
 
+		if($id_p!=null){
 			$id_tp=$this->get("id_tp");
 
 			$update=$this->db->query("UPDATE `transaksi_penjualan` SET `status`=2 WHERE id_transPenjualan = $id_tp");
@@ -390,6 +391,29 @@ class Tokotani extends REST_Controller
 		}else{
 			$sta= array('status' => "no") ;
 			$this->response([$sta],REST_Controller::HTTP_OK);
+		}
+	}
+
+	public function hubungiKami_post() {
+		$id_p=$this->input->get_request_header('Authorization');
+		if($id_p!=null){
+			$judul=$this->post("judul_pertanyaan");
+			$kategori=$this->post("kategori");
+			$deskripsi=$this->post("deskripsi");
+			$foto=$this->post("foto");
+
+			$isi=
+			$this
+			->db
+			->query("INSERT INTO `hubungi_kami`(`id`, `id_pengguna`, `judul_pertanyaan`, `kategori`, `deskripsi`, `foto`) VALUES (null,$id_p,'$judul','$kategori','$deskripsi','$foto')");
+
+			if($isi) {
+				$this->response('OK',REST_Controller::HTTP_OK);
+			} else {
+				$this->response('NO',REST_Controller::HTTP_NOT_FOUND);
+			}
+		} else {
+			$this->response('NO',REST_Controller::HTTP_NOT_FOUND);
 		}
 	}
 
