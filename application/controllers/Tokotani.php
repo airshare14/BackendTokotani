@@ -394,6 +394,71 @@ class Tokotani extends REST_Controller
 		}
 	}
 
+	public function StatusPengiriman_get(){
+		$id_p=$this->input->get_request_header('Authorization');
+
+		if($id_p!=null){
+			$id_tp=$this->get("id_tp");
+
+			$update=$this->db->query("UPDATE `transaksi_penjualan` SET `status`=3 WHERE id_transPenjualan = $id_tp");
+
+			if($update){
+				$sta= array('status_trans' => "3") ;
+				$this->response([$sta],REST_Controller::HTTP_OK);
+			}else{
+				$sta= array('status_trans' => "gagal") ;
+				$this->response([$sta],REST_Controller::HTTP_OK);
+			}
+
+		}else{
+			$sta= array('status' => "no") ;
+			$this->response([$sta],REST_Controller::HTTP_OK);
+		}
+	}
+
+	public function DaftarPenjualan_get(){
+		$id_p=$this->input->get_request_header('Authorization');
+
+		if($id_p!=null){
+			$id_tp=$this->get("id_tp");
+
+			$update=$this->db->query("UPDATE `transaksi_penjualan` SET `status`=4 WHERE id_transPenjualan = $id_tp");
+
+			if($update){
+				$sta= array('status_trans' => "4") ;
+				$this->response([$sta],REST_Controller::HTTP_OK);
+			}else{
+				$sta= array('status_trans' => "gagal") ;
+				$this->response([$sta],REST_Controller::HTTP_OK);
+			}
+
+		}else{
+			$sta= array('status' => "no") ;
+			$this->response([$sta],REST_Controller::HTTP_OK);
+		}
+	}
+
+	public function NomorPengiriman_post() {
+		$id_p=$this->input->get_request_header('Authorization');
+		if($id_p!=null){
+			$nomor_pengiriman=$this->post("nomor_pengiriman");
+
+
+			$isi=
+			$this
+			->db
+			->query("INSERT INTO `konfirmasipengiriman`( `id_pengiriman`, `id_pengguna`, `nomor_pengiriman`) VALUES (null,$id_p,'$nomor_pengiriman')");
+
+			if($isi) {
+				$this->response('OK',REST_Controller::HTTP_OK);
+			} else {
+				$this->response('NO',REST_Controller::HTTP_NOT_FOUND);
+			}
+		} else {
+			$this->response('NO',REST_Controller::HTTP_NOT_FOUND);
+		}
+	}
+
 	public function hubungiKami_post() {
 		$id_p=$this->input->get_request_header('Authorization');
 		if($id_p!=null){
